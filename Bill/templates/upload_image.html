@@ -1,0 +1,134 @@
+<!-- myapp/templates/upload_image.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload and Evaluate Image</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Pacifico&display=swap');
+
+        body {
+            background: url('https://source.unsplash.com/random/1920x1080') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #ffffff;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .container {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 500px;
+        }
+
+        h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 3rem;
+            color: #ffdd57;
+            margin-bottom: 30px;
+        }
+
+        .form-control-file {
+            margin-bottom: 20px;
+        }
+
+        .btn-primary {
+            background-color: #ffdd57;
+            border-color: #ffdd57;
+            font-size: 1.2rem;
+            padding: 12px 24px;
+            border-radius: 25px;
+            color: #333333;
+            font-weight: bold;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #ffffff;
+            color: #ffdd57;
+            border-color: #ffdd57;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        #imagePreview {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            max-width: 100%;
+            max-height: 300px;
+            display: none;
+        }
+
+        #prediction {
+            margin-top: 20px;
+            font-size: 2rem;
+            color: #ffdd57;
+        }
+
+        @media (max-width: 576px) {
+            h1 {
+                font-size: 2rem;
+            }
+            .btn-primary {
+                font-size: 1rem;
+                padding: 10px 20px;
+            }
+            .container {
+                padding: 20px;
+            }
+            #prediction {
+                font-size: 1.5rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container-fluid d-flex justify-content-center align-items-center min-vh-100">
+        <div class="container">
+            <h1>Upload an Image</h1>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="file" name="image" accept="image/*" class="form-control-file" required onchange="previewImage(event)">
+                </div>
+                <img id="imagePreview" src="#" alt="Image Preview">
+                <button type="submit" class="btn btn-primary">Upload</button>
+            </form>
+            {% if prediction %}
+            <div id="prediction">{{ prediction }}</div>
+            {% endif %}
+        </div>
+    </div>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function() {
+                var output = document.getElementById('imagePreview');
+                output.src = reader.result;
+                output.style.display = 'block';
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+</body>
+</html>
